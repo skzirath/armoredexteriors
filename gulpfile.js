@@ -17,6 +17,10 @@ const sass = require('gulp-sass');
 const uglify = require('gulp-uglify');
 const useref = require('gulp-useref');
 
+//Including dependencies for https://github.com/shinnn/gulp-gh-pages
+const {src, task}= require('gulp');
+const ghPages = require('gulp-gh-pages');
+
 // Define paths
 const paths = {
   base:   {
@@ -184,3 +188,7 @@ gulp.task('html', function() {
 gulp.task('build', gulp.series(gulp.parallel('clean:tmp', 'clean:packageLock', 'clean:dist', 'copy:all', 'copy:libs'), 'scss', 'html'));
 
 gulp.task('default', gulp.series(gulp.parallel('fileinclude', 'scss'), gulp.parallel('browsersync', 'watch')));
+
+gulp.task('gh-pages', () => src('./dist/**/*').pipe(ghPages()));
+
+gulp.task('deploy', gulp.series('build', 'gh-pages'));
